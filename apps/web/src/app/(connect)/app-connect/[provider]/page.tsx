@@ -55,6 +55,7 @@ export default async function ConnectPage({ params, searchParams }: Props) {
         icon: app.icon,
         darkIcon: app.darkIcon,
         connectionType: app.connectionMethod.type,
+        browserConnector: app.browserConnector,
         labelHint: app.labelHint,
         fields:
           app.connectionMethod.type === "api_key" ||

@@ -19,6 +19,10 @@ interface ConnectFlowProps {
     icon: string;
     darkIcon?: string;
     connectionType: string;
+    browserConnector?: {
+      provider: string;
+      actions: readonly string[];
+    };
     labelHint?: string;
     fields?: {
       name: string;

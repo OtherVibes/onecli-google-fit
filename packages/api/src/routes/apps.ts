@@ -119,6 +119,7 @@ export const appRoutes = () => {
         available: a.available,
         connectionType: a.connectionMethod.type,
         configurable: !!a.configurable,
+        browserConnector: a.browserConnector ?? null,
         config: config
           ? {
               hasCredentials: !!config.credentials,
@@ -332,6 +333,7 @@ export const appRoutes = () => {
       available: appDef.available,
       connectionType: appDef.connectionMethod.type,
       configurable: !!appDef.configurable,
+      browserConnector: appDef.browserConnector ?? null,
       config: config
         ? {
             hasCredentials: config.hasCredentials,

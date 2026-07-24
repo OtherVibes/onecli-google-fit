@@ -5,6 +5,19 @@ export const linkedin: AppDefinition = {
   name: "LinkedIn",
   icon: "/icons/linkedin.svg",
   description: "Profile, posts, and social engagement.",
+  browserConnector: {
+    provider: "linkedin",
+    actions: [
+      "get_profile",
+      "get_post",
+      "create_comment",
+      "delete_comment",
+      "send_message",
+      "create_post",
+      "edit_post",
+      "delete_post",
+    ],
+  },
   connectionMethod: {
     type: "oauth",
     defaultScopes: ["openid", "profile", "email", "w_member_social"],
