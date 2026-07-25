@@ -38,6 +38,7 @@ export default async function AppDetailPage({ params }: Props) {
         darkIcon: app.darkIcon,
         description: app.description,
         connectionType: app.connectionMethod.type,
+        browserConnector: app.browserConnector,
         defaultScopes:
           app.connectionMethod.type === "oauth"
             ? (app.connectionMethod.defaultScopes ?? [])
