@@ -5,7 +5,8 @@
     "NODE_ENV",
     "NEXT_PUBLIC_EDITION",
     "NEXT_PUBLIC_ONECLI_DEMO",
-    "APP_VERSION"
+    "APP_VERSION",
+    "LINKEDIN_BROWSER_WORKER_URL"
   ],
   "globalPassThroughEnv": [
     "DATABASE_URL",

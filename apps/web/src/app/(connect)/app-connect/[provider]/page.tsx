@@ -55,7 +55,6 @@ export default async function ConnectPage({ params, searchParams }: Props) {
         icon: app.icon,
         darkIcon: app.darkIcon,
         connectionType: app.connectionMethod.type,
-        browserConnector: app.browserConnector,
         labelHint: app.labelHint,
         fields:
           app.connectionMethod.type === "api_key" ||
@@ -65,6 +64,10 @@ export default async function ConnectPage({ params, searchParams }: Props) {
         fileImport:
           app.connectionMethod.type === "credentials_import"
             ? app.connectionMethod.fileImport
+            : undefined,
+        browserActions:
+          app.connectionMethod.type === "browser"
+            ? app.connectionMethod.actions
             : undefined,
         apiKeyFields,
       }}

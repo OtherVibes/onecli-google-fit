@@ -40,11 +40,12 @@ interface AppDetailProps {
     icon: string;
     darkIcon?: string;
     description: string;
-    connectionType: "oauth" | "api_key" | "credentials_import" | "cloud_only";
-    browserConnector?: {
-      provider: string;
-      actions: readonly string[];
-    };
+    connectionType:
+      | "oauth"
+      | "api_key"
+      | "credentials_import"
+      | "cloud_only"
+      | "browser";
     defaultScopes: string[];
     permissions: OAuthPermission[];
     blocklist?: { id: string; name: string; hostPattern: string }[];
@@ -218,11 +219,6 @@ export const AppDetail = ({
             <p className="text-sm text-muted-foreground mt-0.5">
               {app.description}
             </p>
-            {app.browserConnector && (
-              <p className="text-xs text-muted-foreground mt-1">
-                Chromium browser connector available
-              </p>
-            )}
           </div>
         </div>
 

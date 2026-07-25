@@ -19,10 +19,7 @@ interface ConnectFlowProps {
     icon: string;
     darkIcon?: string;
     connectionType: string;
-    browserConnector?: {
-      provider: string;
-      actions: readonly string[];
-    };
+    browserActions?: readonly string[];
     labelHint?: string;
     fields?: {
       name: string;
@@ -99,9 +96,18 @@ export const ConnectFlow = ({
     if (orgId) params.set("_org", orgId);
 
     const qs = params.toString();
-    const authorizeUrl = `${API_ORIGIN}/v1/apps/${app.id}/authorize${qs ? `?${qs}` : ""}`;
+    const endpoint =
+      app.connectionType === "browser" ? "browser/start" : "authorize";
+    const authorizeUrl = `${API_ORIGIN}/v1/apps/${app.id}/${endpoint}${qs ? `?${qs}` : ""}`;
     window.location.href = authorizeUrl;
-  }, [app.id, connectionId, agentName, explicitProjectId, orgId]);
+  }, [
+    app.id,
+    app.connectionType,
+    connectionId,
+    agentName,
+    explicitProjectId,
+    orgId,
+  ]);
 
   // Countdown timer for auto-redirect
   useEffect(() => {
@@ -217,6 +223,29 @@ export const ConnectFlow = ({
             }}
           >
             Try again
+          </Button>
+        </div>
+      </ConnectLayout>
+    );
+  }
+
+  if (app.connectionType === "browser") {
+    return (
+      <ConnectLayout
+        appName={app.name}
+        appIcon={app.icon}
+        appDarkIcon={app.darkIcon}
+      >
+        <div className="flex flex-col items-center gap-5 py-4">
+          <div className="text-center">
+            <p className="text-sm font-medium">Connect with Chromium</p>
+            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+              OneCLI will open an isolated Chromium window. Your LinkedIn
+              session stays in OneCLI&apos;s encrypted vault.
+            </p>
+          </div>
+          <Button className="w-full" onClick={doRedirect}>
+            Open Chromium
           </Button>
         </div>
       </ConnectLayout>

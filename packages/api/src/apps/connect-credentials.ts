@@ -74,6 +74,13 @@ export const resolveConnectCredentials = async (
     };
   }
 
+  if (activeMethod.type === "browser") {
+    return {
+      ok: false,
+      error: `Provider "${provider}" uses browser flow, not direct credentials`,
+    };
+  }
+
   if (!body?.fields) {
     return { ok: false, error: "Missing fields in request body" };
   }

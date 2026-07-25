@@ -73,6 +73,7 @@ export const APP_CATEGORIES: Record<string, AppCategory> = {
   resend: "communication",
   slack: "communication",
   linkedin: "communication",
+  "linkedin-browser": "communication",
   zoom: "communication",
   hubspot: "communication",
   affinity: "communication",

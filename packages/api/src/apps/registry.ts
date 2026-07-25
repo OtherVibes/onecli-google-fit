@@ -35,6 +35,7 @@ import { dropbox } from "./dropbox";
 import { supabase } from "./supabase";
 import { aws } from "./aws";
 import { linkedin } from "./linkedin";
+import { linkedinBrowser } from "./linkedin-browser";
 import { trello } from "./trello";
 import { monday } from "./monday";
 import { vercel } from "./vercel";
@@ -77,6 +78,7 @@ const staticApps: AppDefinition[] = [
   mongodbAtlas,
   supabase,
   linkedin,
+  linkedinBrowser,
   trello,
   vercel,
   jfrogArtifactory,

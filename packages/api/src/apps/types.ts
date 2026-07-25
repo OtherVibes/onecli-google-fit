@@ -29,13 +29,6 @@ export interface OAuthPermission {
   access: "read" | "write";
 }
 
-export interface BrowserConnectorDefinition {
-  /** Service route that owns the Chromium profile and session cookie. */
-  provider: string;
-  /** Actions exposed to agents; raw CDP is never part of this contract. */
-  actions: readonly string[];
-}
-
 export type ConnectionMethod =
   | {
       type: "oauth";
@@ -100,6 +93,10 @@ export type ConnectionMethod =
     }
   | {
       type: "cloud_only";
+    }
+  | {
+      type: "browser";
+      actions: readonly string[];
     };
 
 export interface OAuthConfigField {
@@ -118,7 +115,6 @@ export interface AppDefinition {
   /** Icon variant for dark mode. Falls back to `icon` if not set. */
   darkIcon?: string;
   description: string;
-  browserConnector?: BrowserConnectorDefinition;
   connectionMethod: ConnectionMethod;
   /** Optional alternate connection methods offered alongside the primary
    *  `connectionMethod` (e.g. an API-key option in addition to OAuth). The

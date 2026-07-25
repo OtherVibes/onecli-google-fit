@@ -66,6 +66,10 @@ import {
   removeBlocklistRule,
 } from "../services/app-blocklist-service";
 import { logger } from "../lib/logger";
+import {
+  createLinkedInBrowserLogin,
+  completeLinkedInBrowserLogin,
+} from "../services/linkedin-browser-service";
 
 const docsBaseURL = "https://onecli.sh/docs/guides/credential-stubs";
 
@@ -119,7 +123,6 @@ export const appRoutes = () => {
         available: a.available,
         connectionType: a.connectionMethod.type,
         configurable: !!a.configurable,
-        browserConnector: a.browserConnector ?? null,
         config: config
           ? {
               hasCredentials: !!config.credentials,
@@ -333,7 +336,6 @@ export const appRoutes = () => {
       available: appDef.available,
       connectionType: appDef.connectionMethod.type,
       configurable: !!appDef.configurable,
-      browserConnector: appDef.browserConnector ?? null,
       config: config
         ? {
             hasCredentials: config.hasCredentials,
@@ -451,6 +453,51 @@ export const appRoutes = () => {
       return c.redirect(authUrl);
     },
   );
+
+  app.get("/:provider/browser/start", authMiddleware, async (c) => {
+    if (c.req.param("provider") !== "linkedin-browser") {
+      return c.json({ error: "Browser connector not found" }, 404);
+    }
+    const auth = c.get("auth");
+    const projectId = requireProjectId(auth);
+    const connectionId = c.req.query("connectionId");
+    const agentName = c.req.query("agent_name");
+    const apiOrigin = getRequestOrigin(c.req.raw);
+    const appOrigin = APP_URL || apiOrigin;
+    const login = createLinkedInBrowserLogin({
+      projectId,
+      connectionId,
+      agentName,
+      callbackUrl: `${apiOrigin}/v1/apps/linkedin-browser/browser/callback`,
+    });
+    const workerUrl =
+      process.env.LINKEDIN_BROWSER_WORKER_URL ?? "http://127.0.0.1:10256";
+    const url = new URL(`${workerUrl}/connect`);
+    url.searchParams.set("callback", login.callbackUrl);
+    url.searchParams.set("token", login.token);
+    url.searchParams.set("return", `${appOrigin}/app-connect/linkedin-browser`);
+    return c.redirect(url.toString());
+  });
+
+  app.post("/:provider/browser/callback", async (c) => {
+    if (c.req.param("provider") !== "linkedin-browser") {
+      return c.json({ error: "Browser connector not found" }, 404);
+    }
+    const body = (await c.req.json().catch(() => null)) as {
+      token?: string;
+      storageState?: unknown;
+      metadata?: Record<string, unknown>;
+    } | null;
+    if (!body?.token || !body.storageState) {
+      return c.json({ error: "Browser session payload is incomplete" }, 400);
+    }
+    const result = await completeLinkedInBrowserLogin(
+      body.token,
+      body.storageState,
+      body.metadata,
+    );
+    return c.json(result);
+  });
 
   // ── GET /apps/:provider/callback ── OAuth callback ─────────────────────
   app.get("/:provider/callback", async (c) => {
